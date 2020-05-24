@@ -1,0 +1,111 @@
+@import './transition.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+}
+
+html, body {
+  //height: 100%;
+  margin: 0 auto;
+  background-color: $background-main;
+  font-family: sans-serif,Arial, SimHei,"Helvetica Neue",Helvetica,monospace;
+}
+
+// 使元素处于所有定位元素的最顶级, 当Message未消失就弹出模态框时会用到, 避免Message被模态框遮罩掩盖
+.top-layer {
+  z-index: 9999!important;
+}
+.tool-bar {
+  height: 60px;
+  padding: 5px;
+  padding-right: 10px;
+}
+.search-bar {
+  width: 350px!important;
+}
+.little-space {
+  > * {
+    margin: 5px;
+  }
+  &:not(.wrap):not(.column) > *:first-child {
+    margin-left: 0;
+  }
+}
+.lkt-draggable {
+  user-select: none;
+}
+.lkt-draggable--pointer {
+  cursor: pointer;
+}
+// flex
+.flex {
+  display: flex;
+  &.inline {
+    display: inline-flex;
+  }
+  &.center {
+    align-items: center;
+    justify-content: center;
+  }
+  &.around {
+    justify-content: space-around;
+  }
+  &.between {
+    justify-content: space-between;
+  }
+  &.start {
+    justify-content: flex-start;
+  }
+  &.end {
+    justify-content: flex-end;
+  }
+  &.column {
+    flex-direction: column;
+  }
+  &.wrap {
+    flex-wrap: wrap;
+  }
+  &.align-center{
+    align-items:center;
+  }
+}
+// 在一行的el-button
+.button-in-row{
+  .el-button{
+    margin-right: 10px;
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+}
+
+.title-card {
+  .flex {
+    position: relative;
+  }
+  .title {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+
+//@media only screen and (max-width: 1600px) and (min-width: 1280px){
+//  html{
+//    font-size: 15px;
+//  }
+//}
+@media only screen and (min-width: 960px){
+  html{
+    font-size: 14px;
+  }
+}
+@media only screen and (max-width: 960px) {
+  html {
+    font-size: 12px;
+  }
+}
