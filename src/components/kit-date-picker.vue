@@ -12,7 +12,7 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-  import { isUndefined } from '../utils';
+
   export default {
     props: {
       type: {

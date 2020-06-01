@@ -1,5 +1,12 @@
 import { Message } from 'element-ui';
 import { AnyFunction } from '../types/common';
+import {isArray, isUndefined} from './is';
+
+export * from './date';
+export * from './is';
+export * from './math';
+export * from './regex';
+export * from './array';
 
 const { floor } = Math;
 const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -81,33 +88,6 @@ export function debounce<F extends AnyFunction>(fn: F, opts: DebounceOptions = {
 }
 
 /**
- * 便于ts类型推断
- */
-export function isUndefined(v: any): v is void {
-  return typeof v === 'undefined';
-}
-export function isNull(v: any): v is null {
-  return typeof v === 'object' && !v;
-}
-export function isString(v: any): v is string {
-  return typeof v === 'string';
-}
-export function isNumber(v: any): v is number {
-  return typeof v === 'number';
-}
-export function isFunction(v: any): v is AnyFunction {
-  return typeof v === 'function';
-}
-export function isPlainObject(v: any) {
-  return typeof v === 'object' && v;
-}
-export const isArray = Array.isArray;
-/** 判断这个值没有  */
-export function isNil(v: any) {
-  return v === undefined || v === null || v === '';
-}
-
-/**
  * 命名模式转换 eg-name -> EgName
  */
 export function kebabToPascal(kebab: string) {
@@ -146,9 +126,9 @@ export function assert(exp: any, msg?: string) {
 }
 
 export const isRefType = (o: any) => o && typeof o === 'object';
-export interface IndexSignature {
-  [index: string]: any;
-}
+// export interface IndexSignature {
+//   [index: string]: any;
+// }
 /**
  * 深拷贝一个普通的js对象，采用非递归形式避免栈溢出
  * @param obj 源对象
@@ -198,77 +178,6 @@ export function deepClone(obj: any) {
   return copy;
 }
 
-function resolveFormatter(formatter: string) {
-  const tokens = formatter.split(/[\.\:]/).filter(token => token.trim()).filter(Boolean).map(token => [token, true] as [string, boolean]);
-  return new Map(tokens);
-}
-/**
- * 格式化毫秒数
- * @param ms
- * @param zh：是否中文
- * @param formatterStr
- */
-export function formatMilliseconds(ms: number, zh?: boolean, formatterStr = 'hh:mm:ss') {
-  if (isNaN(Number(ms))) { return '- -'; }
-
-  const formatter = resolveFormatter(formatterStr);
-  const MM = formatter.get('MM');
-  const DD = formatter.get('DD');
-  const hh = formatter.get('hh');
-  const mm = formatter.get('mm');
-  const ss = formatter.get('ss');
-  const mmm = formatter.get('mmm');
-  const m = formatter.get('m');
-
-  ms = floor(ms);
-  let day = floor(floor(ms / 3600000) / 24);
-  let hour = floor(ms / 3600000);
-  let min = floor(ms / 60000);
-  let sec = floor(ms / 1000);
-  day = MM ? day % 30 : day;
-  hour = DD ? hour % 24 : hour;
-  min = mm ? min % 60 : min;
-  sec = ss ? sec % 60 : sec;
-  ms = mmm ? ms % 1000 : ms;
-  ms = m ? floor(ms % 1000 / 100) : ms;
-
-  let ret = '';
-  if (zh) {
-    DD && (ret += day + '天');
-    hh && (ret += hour + '时');
-    mm && (ret += min + '分');
-    ss && (ret += sec + '秒');
-    mmm && (ret += ms + '毫秒');
-  } else {
-    DD && (ret += leftFill0(day));
-    DD && hh && (ret += ':');
-    hh && (ret += leftFill0(hour));
-    hh && mm && (ret += ':');
-    mm && (ret += leftFill0(min));
-    mm && ss && (ret += ':');
-    ss && (ret += leftFill0(sec));
-    ss && (mmm || m) && (ret += '.');
-    mmm && (ret += leftFill0(ms, 3));
-    m && (ret += leftFill0(ms, 1));
-  }
-  return ret;
-}
-
-export function formatDate(date: Date) {
-  return date.getFullYear() + '-' + leftFill0(date.getMonth() + 1) + '-' + leftFill0(date.getDate());
-}
-
-export function formatTime(date: Date) {
-  const h = leftFill0(date.getHours());
-  const m = leftFill0(date.getMinutes());
-  const s = leftFill0(date.getSeconds());
-  return h + ':' + m + ':' + s;
-}
-
-export function formatDateTime(date: Date) {
-  return formatDate(date) + ' ' + formatTime(date);
-}
-
 /**
  * 截取给定位数的数字, 不足则左补0
  * @param num 需要截取的数字
@@ -276,59 +185,6 @@ export function formatDateTime(date: Date) {
  */
 export function leftFill0(num: number, n = 2) {
   return (new Array(n).join('0') + num).slice(-n);
-}
-
-/**
- * 只要list中含有后面传入的所有参数中的一项就返回true
- * @param list
- * @param strs 第二个以及之后的所有参数集合
- */
-export function listContainsOr(list: string[], ...strs: string[]) {
-  return strs.some((str) => list.includes(str));
-}
-export function listContainAnd(list: any[], ...strs: any[]) {
-  for (const e of strs) {
-    if (list.indexOf(e) < 0) { return false; }
-  }
-  return true;
-}
-
-/**
- * 一个对象，根据数字得到中文， 0为星期日
- */
-export const weekMap = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-
-/**
- * 获取当前时间的格式化对象
- */
-export function getClock() {
-  const dt = new Date();
-  return {
-    dt: formatDate(dt),
-    week: weekMap[dt.getDay()],
-    time: formatTime(dt),
-  };
-}
-
-/**
- * Test a string with phone number Reg.
- * @param phone
- */
-export function regexPhone(phone: string): boolean {
-  return /^1[34578]\d{9}$/.test(phone);
-}
-
-export function regexIP(ip: string): boolean {
-  return /^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$/.test(ip);
-
-}
-// rule check
-export function ruleCheckIP(rule: any, value: any, callback: any) {
-  if (regexIP(value)) {
-    callback();
-  } else {
-    callback(new Error('非IP格式'));
-  }
 }
 
 export function string2Download(content: string, title: string) {
@@ -347,18 +203,4 @@ export function string2Download(content: string, title: string) {
   } else { // IE10+下载
     navigator.msSaveBlob(blob, title);
   }
-}
-
-/** 如果返回-1 表示未找到 */
-export function findIndexOfArray(array: any[], val: any, key?: string): number {
-  for (let i = 0; i < array.length; i++) {
-    const item = array[i];
-    if (item instanceof Object) {
-      if (!key) { throw Error('findIndexOfArray_key_null'); }
-      if (item[key] === val) { return i; }
-    } else {
-      if (item === val) { return i; }
-    }
-  }
-  return -1;
 }

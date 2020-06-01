@@ -1,9 +1,100 @@
+import {leftFill0} from './index';
+
+const { floor } = Math;
+function _resolveFormatter(formatter: string) {
+  const tokens = formatter.split(/[\.\:]/).filter(token => token.trim()).filter(Boolean).map(token => [token, true] as [string, boolean]);
+  return new Map(tokens);
+}
+
+/**
+ * 格式化毫秒数
+ * @param ms
+ * @param zh：是否中文
+ * @param formatterStr
+ */
+export function formatMilliseconds(ms: number, zh?: boolean, formatterStr = 'hh:mm:ss') {
+  if (isNaN(Number(ms))) { return '- -'; }
+
+  const formatter = _resolveFormatter(formatterStr);
+  const MM = formatter.get('MM');
+  const DD = formatter.get('DD');
+  const hh = formatter.get('hh');
+  const mm = formatter.get('mm');
+  const ss = formatter.get('ss');
+  const mmm = formatter.get('mmm');
+  const m = formatter.get('m');
+
+  ms = floor(ms);
+  let day = floor(floor(ms / 3600000) / 24);
+  let hour = floor(ms / 3600000);
+  let min = floor(ms / 60000);
+  let sec = floor(ms / 1000);
+  day = MM ? day % 30 : day;
+  hour = DD ? hour % 24 : hour;
+  min = mm ? min % 60 : min;
+  sec = ss ? sec % 60 : sec;
+  ms = mmm ? ms % 1000 : ms;
+  ms = m ? floor(ms % 1000 / 100) : ms;
+
+  let ret = '';
+  if (zh) {
+    DD && (ret += day + '天');
+    hh && (ret += hour + '时');
+    mm && (ret += min + '分');
+    ss && (ret += sec + '秒');
+    mmm && (ret += ms + '毫秒');
+  } else {
+    DD && (ret += leftFill0(day));
+    DD && hh && (ret += ':');
+    hh && (ret += leftFill0(hour));
+    hh && mm && (ret += ':');
+    mm && (ret += leftFill0(min));
+    mm && ss && (ret += ':');
+    ss && (ret += leftFill0(sec));
+    ss && (mmm || m) && (ret += '.');
+    mmm && (ret += leftFill0(ms, 3));
+    m && (ret += leftFill0(ms, 1));
+  }
+  return ret;
+}
+
+export function formatDate(date: Date) {
+  return date.getFullYear() + '-' + leftFill0(date.getMonth() + 1) + '-' + leftFill0(date.getDate());
+}
+
+export function formatTime(date: Date) {
+  const h = leftFill0(date.getHours());
+  const m = leftFill0(date.getMinutes());
+  const s = leftFill0(date.getSeconds());
+  return h + ':' + m + ':' + s;
+}
+
+export function formatDateTime(date: Date) {
+  return formatDate(date) + ' ' + formatTime(date);
+}
 
 export function clearHMS(dt: Date) {
   dt.setHours(0);
   dt.setMinutes(0);
   dt.setSeconds(0);
   dt.setMilliseconds(0);
+}
+
+/**
+ * 一个对象，根据数字得到中文， 0为星期日
+ */
+export const weekMap = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+/**
+ * 获取当前时间的格式化对象
+ */
+export function getClock() {
+  const dt = new Date();
+  return {
+    dt: formatDate(dt),
+    week: weekMap[dt.getDay()],
+    time: formatTime(dt),
+  };
 }
 
 /**
