@@ -1,5 +1,3 @@
-
-
 /**
  * Test a string with phone number Reg.
  * @param phone

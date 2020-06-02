@@ -634,4 +634,3 @@ export function calcMaxAndMin(yDateSet: number[]): number[] {
   }
   return ret;
 }
-
