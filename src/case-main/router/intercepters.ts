@@ -6,6 +6,7 @@ import { Route } from 'vue-router';
 import { CancelTokenSources } from '../request';
 import { listContainAnd } from '../../utils';
 import { storeUserInfo, storePageMenu, initStoreUserInfo, updateStoreCurrentRoute } from '../store';
+import { submitErrChanel } from '../store/errorMsgChannel'
 
 /**
  * 用于页面权限的校验
@@ -67,6 +68,8 @@ export function routeIntercept(router: VueRouter) {
     if (!storeUserInfo.token) {
       initStoreUserInfo();
     }
+    // 初始化err-msg-channel
+    submitErrChanel("");
     // 指定默认第一个路由
     if (to.path === '/') {
       const menu = getMainRoute();
