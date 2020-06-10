@@ -1,6 +1,6 @@
 import { Message } from 'element-ui';
 import { AnyFunction } from '../types/common';
-import {isArray, isUndefined} from './is';
+import {isArray, isUndefined, isPlainObject} from './is';
 
 export * from './date';
 export * from './is';
