@@ -394,6 +394,7 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
       type,
       ...serie,
     };
+    // 设置最大柱宽
     if(type==='bar'){
       obj.barMaxWidth = '55'
     }
