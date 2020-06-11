@@ -394,6 +394,9 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
       type,
       ...serie,
     };
+    if(type==='bar'){
+      obj.barMaxWidth = '55'
+    }
     option.series.push(obj);
   });
   if (data.y.length > 1) {
