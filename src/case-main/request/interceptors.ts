@@ -6,7 +6,7 @@ import { storeUserInfo, rmStoreUserInfo } from '../store';
 
 /// 用于外部配置功能函数
 export const AxiosInterceptConfig = {
-  responseRejectFunc: function (e:any, router:VueRouter) {
+  responseRejectFunc(e: any, router: VueRouter) {
     // 只处理result==2，其他交给catch
     if (e.response && e.response.data && e.response.data.result === 2) {
       rmStoreUserInfo();
@@ -15,14 +15,14 @@ export const AxiosInterceptConfig = {
       throw e;
     }
   },
-  requestPartFunc: function (config:AxiosRequestConfig) {
+  requestPartFunc(config: AxiosRequestConfig) {
     if (!(config.data instanceof FormData)) {
       const data = Qs.parse(config.data);
       data.token = storeUserInfo.token;
       config.data = Qs.stringify(data);
     }
-  }
-}
+  },
+};
 
 export function axiosIntercept(router: VueRouter) {
   axios.interceptors.response.use((res) => {
@@ -41,7 +41,7 @@ export function axiosIntercept(router: VueRouter) {
       // 返回时直接返回的data
       return res ? res.data : null;
     }, (e) => {
-      AxiosInterceptConfig.responseRejectFunc(e,router)
+      AxiosInterceptConfig.responseRejectFunc(e, router);
     },
   );
   axios.interceptors.request.use((config) => {

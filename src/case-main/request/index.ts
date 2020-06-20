@@ -9,12 +9,12 @@ export const CancelTokenSources: CancelTokenSource[] = [];
 /// 重载配置项
 export const RequestConfig = {
   contentType: 'application/x-www-form-urlencoded',
-  errShowFunc: function (msg:string) {
+  errShowFunc(msg: string) {
     Message.error(msg);
-  }
-}
+  },
+};
 
-const errHandle = (e: AxiosError, url:string, config:any)=>{
+const errHandle = (e: AxiosError, url: string, config: any) => {
   const showMsg = isUndefined(config.showMsg) || config.showMsg;
   const throwable = isUndefined(config.throwable) || config.throwable;
   const response = e.response;
@@ -45,7 +45,7 @@ const errHandle = (e: AxiosError, url:string, config:any)=>{
     code: e.code,
     result: data ? data.result || 0 : 0,
   };
-}
+};
 
 /**
  * @param url request url
@@ -60,18 +60,18 @@ export const postService = (
 ) => {
   const headers = Object.assign({
     'Content-Type': RequestConfig.contentType,
-  }, config.headers || {})
-  let data:any = payload;
-  if(headers['Content-Type'].indexOf("x-www-form-urlencoded")>-1){
+  }, config.headers || {});
+  let data: any = payload;
+  if (headers['Content-Type'].indexOf('x-www-form-urlencoded') > -1) {
     data = Qs.stringify(payload, {
       skipNulls: true,
-    })
+    });
   }
   return axios.post(url, data, {
     headers,
     withCredentials: true,
   }).catch((e: AxiosError) => {
-    return errHandle(e, url, config)
+    return errHandle(e, url, config);
   }) as Promise<any>;
 };
 
@@ -178,6 +178,6 @@ export function uploadService(
     headers: {'Content-Type': 'multipart/form-data'},
     withCredentials: true,
   }).catch((e: AxiosError) => {
-    return errHandle(e, url, {showMsg:true, throwable:true})
+    return errHandle(e, url, {showMsg: true, throwable: true});
   });
 }

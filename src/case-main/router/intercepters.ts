@@ -6,7 +6,7 @@ import { Route } from 'vue-router';
 import { CancelTokenSources } from '../request';
 import { listContainAnd } from '../../utils';
 import { storeUserInfo, storePageMenu, initStoreUserInfo, updateStoreCurrentRoute } from '../store';
-import { submitErrChanel } from '..'
+import { submitErrChanel } from '..';
 
 /** 用于页面权限的校验 */
 export function checkPrivilege(all: any[], need: any[]) {
@@ -60,7 +60,7 @@ export function routeIntercept(router: VueRouter) {
       source.cancel();
     }
     CancelTokenSources.splice(0, CancelTokenSources.length);
-    RouteInterceptConfig.beforePartFunc(to,from,next)
+    RouteInterceptConfig.beforePartFunc(to, from, next);
     next();
   });
   router.afterEach(to => {
@@ -118,8 +118,8 @@ export function routeIntercept(router: VueRouter) {
   });
 }
 
-export const RouteInterceptConfig={
-  beforePartFunc: function (to:Route, from:Route, next:any) {
+export const RouteInterceptConfig = {
+  beforePartFunc(to: Route, from: Route, next: any) {
     if (to.name !== from.name && process.env.VUE_APP_REQUEST_MODE !== 'display') {
       NProgress.start();
     }
@@ -127,7 +127,7 @@ export const RouteInterceptConfig={
       initStoreUserInfo();
     }
     // 初始化err-msg-channel
-    submitErrChanel("");
+    submitErrChanel('');
     // 指定默认第一个路由
     if (to.path === '/') {
       const menu = getMainRoute();
@@ -161,5 +161,5 @@ export const RouteInterceptConfig={
     } else {
       next();
     }
-  }
-}
+  },
+};
