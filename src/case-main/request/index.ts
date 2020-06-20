@@ -58,7 +58,7 @@ const errHandle = (e: AxiosError, url: string, config: any) => {
  * @param url request url
  * @param payload request body params
  * @param query url params
- * @param config action configuration
+ * @param config action configuration: contentType-form/json, showMsg, throwable, headers
  */
 export const postService = (
   url: string,
@@ -66,7 +66,7 @@ export const postService = (
   config: any = {},
 ) => {
   const headers = Object.assign({
-    'Content-Type': RequestConfig.getContentType(RequestConfig.contentType),
+    'Content-Type': RequestConfig.getContentType(config.contentType ? config.contentType : RequestConfig.contentType),
   }, config.headers || {});
   let data: any = payload;
   if (headers['Content-Type'].indexOf('x-www-form-urlencoded') > -1) {
