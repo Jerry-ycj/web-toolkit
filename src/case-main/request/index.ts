@@ -93,8 +93,7 @@ export async function postServiceRet(
 }
 
 /**
- * 临时：
- * 此方法主要用于会出现请求频率限制的问题（还要兼容以前）
+ * 临时：此方法主要用于会出现请求频率限制的问题（还要兼容以前）
  */
 export async function mesPostUntilSuccess(url: string, params: object = {}): Promise<any> {
   const res = await postService(url, params, {throwable: false, showMsg: false});
@@ -109,6 +108,7 @@ export interface IDownloadConfiguration {
   filename: string;
   showMsg?: boolean;
 }
+
 /**
  * Download file
  * @param url request url
