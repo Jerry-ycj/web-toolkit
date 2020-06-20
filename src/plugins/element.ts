@@ -1,16 +1,15 @@
 import Vue from 'vue';
 import ElementUI, {Message} from 'element-ui';
 Vue.use(ElementUI);
-import { ElMessageOptions, ElMessageComponent } from 'element-ui/types/message';
-import { isString, debounce } from '../utils';
+// import { ElMessageOptions, ElMessageComponent } from 'element-ui/types/message';
+import { debounce } from '../utils';
 import 'element-ui/lib/theme-chalk/index.css';
-const messageBoxList = ['success', 'warning', 'error', 'info'];
-
-declare module 'element-ui/types/message' {
-  interface ElMessage {
-    [index: string]: (text: string | ElMessageOptions) => ElMessageComponent;
-  }
-}
+// const messageBoxList = ['success', 'warning', 'error', 'info'];
+// declare module 'element-ui/types/message' {
+//   interface ElMessage {
+//     [index: string]: (text: string | ElMessageOptions) => ElMessageComponent;
+//   }
+// }
 // declare module 'element-ui/types/message' {
 //   interface ElMessage {
 //     [index: string]: {
@@ -19,21 +18,20 @@ declare module 'element-ui/types/message' {
 //     };
 //   }
 // }
-
-for (const method of messageBoxList) {
-  const raw = Message[method];
-  Message[method] = function(msg: string | ElMessageOptions) {
-    if (isString(msg)) {
-      return raw.call(this, {
-        message: msg,
-        showClose: true,
-        customClass: 'lkt-message',
-      });
-    } else {
-      return raw.call(this, msg);
-    }
-  };
-}
+// for (const method of messageBoxList) {
+//   const raw = Message[method];
+//   Message[method] = function(msg: string | ElMessageOptions) {
+//     if (isString(msg)) {
+//       return raw.call(this, {
+//         message: msg,
+//         showClose: true,
+//         customClass: 'lkt-message',
+//       });
+//     } else {
+//       return raw.call(this, msg);
+//     }
+//   };
+// }
 
 function adapt() {
   const screenWidth = window.innerWidth;

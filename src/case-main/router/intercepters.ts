@@ -6,11 +6,9 @@ import { Route } from 'vue-router';
 import { CancelTokenSources } from '../request';
 import { listContainAnd } from '../../utils';
 import { storeUserInfo, storePageMenu, initStoreUserInfo, updateStoreCurrentRoute } from '../store';
-import { submitErrChanel } from '../store/errorMsgChannel'
+import { submitErrChanel } from '..'
 
-/**
- * 用于页面权限的校验
- */
+/** 用于页面权限的校验 */
 export function checkPrivilege(all: any[], need: any[]) {
   if (!need || need.length === 0) {
     return true;
@@ -62,47 +60,7 @@ export function routeIntercept(router: VueRouter) {
       source.cancel();
     }
     CancelTokenSources.splice(0, CancelTokenSources.length);
-    if (to.name !== from.name && process.env.VUE_APP_REQUEST_MODE !== 'display') {
-      NProgress.start();
-    }
-    if (!storeUserInfo.token) {
-      initStoreUserInfo();
-    }
-    // 初始化err-msg-channel
-    submitErrChanel("");
-    // 指定默认第一个路由
-    if (to.path === '/') {
-      const menu = getMainRoute();
-      if (menu) { next(menu); }
-    }
-    // 处理需要登录的
-    if (to.matched.some((record) => !record.meta.authDisabled)) {
-      if (!storeUserInfo.token) {
-        // @ts-ignore
-        storeUserInfo.redirect = (to as Route);
-        next({name: 'login'});
-      } else {
-        // 用户权限
-        if (
-          !to.meta ||
-          checkPrivilegeAuthDepartments(to.meta)
-        ) {
-          next();
-        } else {
-          if (from.name === '404') {
-            next({name: 'index'});
-          } else {
-            next({name: '404', params: {msg: '当前页面无权限查看'}});
-          }
-        }
-      }
-    } else if (to.name === 'login' && from.path !== to.path && storeUserInfo.token) {
-      // 直接访问login的
-      // 说明是已经登录的就回原处
-      next({name: 'index'});
-    } else {
-      next();
-    }
+    RouteInterceptConfig.beforePartFunc(to,from,next)
     next();
   });
   router.afterEach(to => {
@@ -115,7 +73,6 @@ export function routeIntercept(router: VueRouter) {
       updateStoreCurrentRoute(to);
       for (const component of Object.values(lastMatch.components)) {
         if (!component) {
-          // console.log('error: component is ', component);
           continue;
         }
         if (!(component as any).options && (!(component as any)._Ctor || !(component as any)._Ctor[0])) {
@@ -159,4 +116,50 @@ export function routeIntercept(router: VueRouter) {
     //     }
     //   }
   });
+}
+
+export const RouteInterceptConfig={
+  beforePartFunc: function (to:Route, from:Route, next:any) {
+    if (to.name !== from.name && process.env.VUE_APP_REQUEST_MODE !== 'display') {
+      NProgress.start();
+    }
+    if (!storeUserInfo.token) {
+      initStoreUserInfo();
+    }
+    // 初始化err-msg-channel
+    submitErrChanel("");
+    // 指定默认第一个路由
+    if (to.path === '/') {
+      const menu = getMainRoute();
+      if (menu) { next(menu); }
+    }
+    // 处理需要登录的
+    if (to.matched.some((record) => !record.meta.authDisabled)) {
+      if (!storeUserInfo.token) {
+        // @ts-ignore
+        storeUserInfo.redirect = (to as Route);
+        next({name: 'login'});
+      } else {
+        // 用户权限
+        if (
+          !to.meta ||
+          checkPrivilegeAuthDepartments(to.meta)
+        ) {
+          next();
+        } else {
+          if (from.name === '404') {
+            next({name: 'index'});
+          } else {
+            next({name: '404', params: {msg: '当前页面无权限查看'}});
+          }
+        }
+      }
+    } else if (to.name === 'login' && from.path !== to.path && storeUserInfo.token) {
+      // 直接访问login的
+      // 说明是已经登录的就回原处
+      next({name: 'index'});
+    } else {
+      next();
+    }
+  }
 }

@@ -5,11 +5,48 @@ import {pushErrMsg, storeErrMsg} from '..';
 import Qs from 'qs';
 axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? process.env.VUE_APP_TEST_BASE_URL : process.env.VUE_APP_BASE_URL;
 export const CancelTokenSources: CancelTokenSource[] = [];
-export interface IRestServiceConfiguration {
-  showMsg?: boolean;
-  throwable?: boolean;
-  headers?: Record<string, string>;
+
+/// 重载配置项
+export const RequestConfig = {
+  contentType: 'application/x-www-form-urlencoded',
+  errShowFunc: function (msg:string) {
+    Message.error(msg);
+  }
 }
+
+const errHandle = (e: AxiosError, url:string, config:any)=>{
+  const showMsg = isUndefined(config.showMsg) || config.showMsg;
+  const throwable = isUndefined(config.throwable) || config.throwable;
+  const response = e.response;
+  const data = response ? response.data : undefined;
+  const msg = response ? data.message : e.message;
+  // 接口错误后的json数据处理
+  if (data) {
+    if (showMsg && msg) {
+      pushErrMsg({
+        src: url,
+        msg,
+      });
+      // 如果未配置errMsgChannel则
+      if (storeErrMsg.submitId === '') {
+        RequestConfig.errShowFunc(msg);
+      }
+    }
+    if (throwable) {
+      throw new Error(msg);
+    }
+  } else {
+    // 有可能是cancel todo
+    // Message.error('网络错误');
+    throw new Error(msg);
+  }
+  return {
+    message: msg,
+    code: e.code,
+    result: data ? data.result || 0 : 0,
+  };
+}
+
 /**
  * @param url request url
  * @param payload request body params
@@ -19,53 +56,29 @@ export interface IRestServiceConfiguration {
 export const postService = (
   url: string,
   payload: object = {},
-  config: IRestServiceConfiguration = {},
+  config: any = {},
 ) => {
-  return axios.post(url, Qs.stringify(payload, {
-    skipNulls: true,
-  }), {
-    headers: Object.assign({
-      'Content-Type': 'application/x-www-form-urlencoded',
-    }, config.headers || {}),
+  const headers = Object.assign({
+    'Content-Type': RequestConfig.contentType,
+  }, config.headers || {})
+  let data:any = payload;
+  if(headers['Content-Type'].indexOf("x-www-form-urlencoded")>-1){
+    data = Qs.stringify(payload, {
+      skipNulls: true,
+    })
+  }
+  return axios.post(url, data, {
+    headers,
     withCredentials: true,
   }).catch((e: AxiosError) => {
-    const showMsg = isUndefined(config.showMsg) || config.showMsg;
-    const throwable = isUndefined(config.throwable) || config.throwable;
-    const response = e.response;
-    const data = response ? response.data : undefined;
-    const msg = response ? data.message : e.message;
-    // 接口错误后的json数据处理
-    if (data) {
-      if (showMsg && msg) {
-        pushErrMsg({
-          src: url,
-          msg,
-        });
-        // 如果未配置errMsgChannel则
-        if (storeErrMsg.submitId === '') {
-          Message.error(msg);
-        }
-      }
-      if (throwable) {
-        throw new Error(msg);
-      }
-    } else {
-      // 有可能是cancel todo
-      // Message.error('网络错误');
-      throw new Error(msg);
-    }
-    return {
-      message: msg,
-      code: e.code,
-      result: data ? data.result || 0 : 0,
-    };
+    return errHandle(e, url, config)
   }) as Promise<any>;
 };
 
 export async function postServiceRet(
   url: string,
   payload: object = {},
-  config: IRestServiceConfiguration = {},
+  config: any = {},
 ) {
   config.showMsg = false;
   config.throwable = false;
@@ -84,6 +97,7 @@ export async function mesPostUntilSuccess(url: string, params: object = {}): Pro
   }
   return res;
 }
+
 export interface IDownloadConfiguration {
   filename: string;
   showMsg?: boolean;
@@ -135,6 +149,7 @@ export function download(
     };
   });
 }
+
 export function upload(url: string, file: File) {
   const formData = new FormData();
   formData.append('file', file);
@@ -146,6 +161,7 @@ export function upload(url: string, file: File) {
     withCredentials: true,
   });
 }
+
 export function uploadService(
   url: string,
   payload: object = {},
@@ -162,32 +178,6 @@ export function uploadService(
     headers: {'Content-Type': 'multipart/form-data'},
     withCredentials: true,
   }).catch((e: AxiosError) => {
-    const showMsg = true;
-    const throwable = true;
-    const response = e.response;
-    const data = response ? response.data : undefined;
-    const msg = response ? data.message : e.message;
-    // 接口错误后的json数据处理
-    if (data) {
-      if (showMsg && msg) {
-        pushErrMsg({
-          src: url,
-          msg,
-        });
-        if (storeErrMsg.submitId === '') {
-          Message.error(msg);
-        }
-      }
-      if (throwable) {
-        throw new Error(msg);
-      }
-    } else {
-      throw new Error(msg);
-    }
-    return {
-      message: msg,
-      code: e.code,
-      result: data ? data.result || 0 : 0,
-    };
+    return errHandle(e, url, {showMsg:true, throwable:true})
   });
 }

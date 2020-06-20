@@ -1,8 +1,28 @@
 import Qs from 'qs';
 import { CancelTokenSources } from './index';
-import axios from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import VueRouter from 'vue-router';
 import { storeUserInfo, rmStoreUserInfo } from '../store';
+
+/// 用于外部配置功能函数
+export const AxiosInterceptConfig = {
+  responseRejectFunc: function (e:any, router:VueRouter) {
+    // 只处理result==2，其他交给catch
+    if (e.response && e.response.data && e.response.data.result === 2) {
+      rmStoreUserInfo();
+      router.push({ name: 'login' });
+    } else {
+      throw e;
+    }
+  },
+  requestPartFunc: function (config:AxiosRequestConfig) {
+    if (!(config.data instanceof FormData)) {
+      const data = Qs.parse(config.data);
+      data.token = storeUserInfo.token;
+      config.data = Qs.stringify(data);
+    }
+  }
+}
 
 export function axiosIntercept(router: VueRouter) {
   axios.interceptors.response.use((res) => {
@@ -21,23 +41,7 @@ export function axiosIntercept(router: VueRouter) {
       // 返回时直接返回的data
       return res ? res.data : null;
     }, (e) => {
-      // 只处理result==2，其他交给catch
-      if (e.response && e.response.data && e.response.data.result === 2) {
-        rmStoreUserInfo();
-        router.push({ name: 'login' });
-      } else {
-        throw e;
-      }
-      // console.log(res.data)
-      // if(!res || !res.data) return;
-      // // 接口错误后的json数据处理
-      // if (res.data.result === 0) {
-      //   Message.error('请求错误：' + res.data.message);
-      //   // throw new Error('请求错误：' + res.data.message);
-      // } else if (res.data.result === 2) {
-      //
-      //   // throw new Error('登录失效');
-      // }
+      AxiosInterceptConfig.responseRejectFunc(e,router)
     },
   );
   axios.interceptors.request.use((config) => {
@@ -47,11 +51,8 @@ export function axiosIntercept(router: VueRouter) {
     const source = axios.CancelToken.source();
     config.cancelToken = source.token;
     CancelTokenSources.push(source);
-    if (!(config.data instanceof FormData)) {
-      const data = Qs.parse(config.data);
-      data.token = storeUserInfo.token;
-      config.data = Qs.stringify(data);
-    }
+    AxiosInterceptConfig.requestPartFunc(config);
     return config;
   });
 }
+
