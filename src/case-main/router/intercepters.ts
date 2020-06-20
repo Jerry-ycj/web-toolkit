@@ -42,7 +42,7 @@ export function checkPrivilegeAuthDepartments(menu: any) {
 }
 
 // 寻找本用户对应权限的第一个route
-function getMainRoute() {
+export function getMainRoute() {
   if (!storeUserInfo.user) { return null; }
   for (const menu of storePageMenu) {
     if (menu.children) {

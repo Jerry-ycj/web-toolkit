@@ -8,7 +8,14 @@ export const CancelTokenSources: CancelTokenSource[] = [];
 
 /// 重载配置项
 export const RequestConfig = {
-  contentType: 'application/x-www-form-urlencoded',
+  contentType: 'form',
+  getContentType(type: string) {
+    if (type === 'form') {
+      return 'application/x-www-form-urlencoded';
+    } else if (type === 'json') {
+      return 'application/json';
+    }
+  },
   errShowFunc(msg: string) {
     Message.error(msg);
   },
@@ -59,7 +66,7 @@ export const postService = (
   config: any = {},
 ) => {
   const headers = Object.assign({
-    'Content-Type': RequestConfig.contentType,
+    'Content-Type': RequestConfig.getContentType(RequestConfig.contentType),
   }, config.headers || {});
   let data: any = payload;
   if (headers['Content-Type'].indexOf('x-www-form-urlencoded') > -1) {
