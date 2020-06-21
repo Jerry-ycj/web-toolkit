@@ -38,3 +38,18 @@ export function useConfirm(msg: string, fn: AnyFunction) {
     } catch {}
   };
 }
+
+// store跨组件中的loading
+export function useLoadingStore(store: any, fn: AnyFunction) {
+  if (!store) { throw Error('useLoadingStore: store is null'); }
+  return async function(this: any, ...rest: any[]) {
+    store.loading = true;
+    try {
+      await fn.apply(this, rest);
+    } catch (e) {
+      throw e;
+    } finally {
+      store.loading = false;
+    }
+  };
+}
