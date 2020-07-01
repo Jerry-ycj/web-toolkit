@@ -1535,7 +1535,7 @@ aws4@^1.8.0:
   resolved "https://registry.npm.taobao.org/aws4/download/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
   integrity sha1-8OAD2cqef1nHpQiUXXsu+aBKVC8=
 
-axios@^0.19.0:
+axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.npm.taobao.org/axios/download/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha1-PqNsXYgY0NX4qKl6bTa4bNwAyyc=
@@ -8201,10 +8201,10 @@ vue-style-loader@^4.1.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-template-compiler@^2.6.10:
-  version "2.6.10"
-  resolved "https://registry.npm.taobao.org/vue-template-compiler/download/vue-template-compiler-2.6.10.tgz#323b4f3495f04faa3503337a82f5d6507799c9cc"
-  integrity sha1-MjtPNJXwT6o1AzN6gvXWUHeZycw=
+vue-template-compiler@^2.6.11:
+  version "2.6.11"
+  resolved "https://registry.npm.taobao.org/vue-template-compiler/download/vue-template-compiler-2.6.11.tgz#c04704ef8f498b153130018993e56309d4698080"
+  integrity sha1-wEcE749JixUxMAGJk+VjCdRpgIA=
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"

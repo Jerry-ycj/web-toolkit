@@ -1,9 +1,11 @@
 import { IMenuItem, storePageMenu } from '../';
 
 // 用于菜单导航的顺序,name+icon
-export function buildMenu(routes: any[], mainMenuTitles: any) {
+export function buildMenu(routes: any[], mainMenuTitles: any, indexName: any) {
   // 生成menu item
-  const routeIndex = routes.filter((config) => config.name === 'index')[0];
+  // menu所在的主路由名称
+  if (!indexName) { indexName = 'index'; }
+  const routeIndex = routes.filter((config) => config.name === indexName)[0];
   const children = routeIndex && routeIndex.children ? routeIndex.children : [];
   // menu: {title, privileges(all), authDepartments(all), children:[{cTitle, name, privileges, authDepartments}], }
   const menu: IMenuItem[] = [];
