@@ -33,17 +33,17 @@ import 'element-ui/lib/theme-chalk/index.css';
 //   };
 // }
 
-function adapt() {
-  const screenWidth = window.innerWidth;
-  let size = '';
-  if (screenWidth < 1080) {
-    size = 'mini';
-  } else if (screenWidth < 1280) {
-    size = 'small';
-  } else if (screenWidth < 1440) {
-    size = 'medium';
-  }
-  Vue.prototype.$ELEMENT = { size };
-}
-window.addEventListener('resize', debounce(adapt));
-adapt();
+// function adapt() {
+//   const screenWidth = window.innerWidth;
+//   let size = '';
+//   if (screenWidth < 1080) {
+//     size = 'mini';
+//   } else if (screenWidth < 1280) {
+//     size = 'small';
+//   } else if (screenWidth < 1440) {
+//     size = 'medium';
+//   }
+//   Vue.prototype.$ELEMENT = { size };
+// }
+// window.addEventListener('resize', debounce(adapt));
+// adapt();
