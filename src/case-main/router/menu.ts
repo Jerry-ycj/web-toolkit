@@ -1,7 +1,7 @@
 import { IMenuItem, storePageMenu } from '../';
 
 // 用于菜单导航的顺序,name+icon
-export function buildMenu(routes: any[], mainMenuTitles: any, indexName: any) {
+export function buildMenu(routes: any[], mainMenuTitles: any, indexName?: any) {
   // 生成menu item
   // menu所在的主路由名称
   if (!indexName) { indexName = 'index'; }
