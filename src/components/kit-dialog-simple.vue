@@ -54,6 +54,8 @@ export default {
         clearErrMsg(props.id);
       }
       props.close();
+      // 关闭后还原err channel
+      submitErrChanel('');
       props.modal.visible = false;
     }
     async function confirm2() {
