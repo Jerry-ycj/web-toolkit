@@ -6,6 +6,7 @@
             :data="displayData"
             v-bind="$attrs"
             v-on="$listeners"
+            @selection-change="selectChange"
             v-on:sort-change="sortChange">
       <slot/>
     </el-table>
@@ -44,6 +45,10 @@ export default {
     data: {
       type: Array,
       default: () => [],
+    },
+    selectChange: {
+      type: Function,
+      default: () => {},
     },
   },
   setup(props: Record<string, any>, ctx: any) {
