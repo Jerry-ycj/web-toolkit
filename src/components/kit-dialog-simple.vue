@@ -51,11 +51,11 @@ export default {
   setup(props: any) {
     function cancel() {
       if (props.id) {
-        clearErrMsg(props.id);
+        // clearErrMsg(props.id);
+        // 关闭后还原err channel
+        submitErrChanel('');
       }
       props.close();
-      // 关闭后还原err channel
-      submitErrChanel('');
       props.modal.visible = false;
     }
     async function confirm2() {
