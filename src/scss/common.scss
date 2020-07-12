@@ -71,6 +71,9 @@ html, body {
   &.align-center{
     align-items:center;
   }
+  &.content-center{
+    justify-content: center;
+  }
 }
 // 在一行的el-button
 .button-in-row{
