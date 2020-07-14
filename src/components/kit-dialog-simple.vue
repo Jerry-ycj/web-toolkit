@@ -4,6 +4,7 @@
           :close-on-click-modal="false"
           :visible.sync="modal.visible"
           :before-close="cancel"
+          :show-close="showClose"
           v-loading="modal.loading||false"
           :width="width">
     <div slot="title" class="flex center">
@@ -42,6 +43,10 @@ export default {
     noFooter: {
       type: Boolean,
       default: false,
+    },
+    showClose:{
+      type: Boolean,
+      default: false
     },
     id: {
       type: String,
