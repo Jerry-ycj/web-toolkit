@@ -46,7 +46,7 @@ export default {
     },
     showClose:{
       type: Boolean,
-      default: false
+      default: true
     },
     id: {
       type: String,
