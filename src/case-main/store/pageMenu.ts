@@ -6,8 +6,7 @@ export interface IMenuItem {
   children?: IMenuItem[];
   icon?: string;
   privileges?: string[];
-  // user.role.department 筛选
-  authDepartments?: number[];
+  authFunc?: Function;
   title?: string;
   name?: string;
   cTitle?: string;

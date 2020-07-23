@@ -26,19 +26,22 @@ export function checkPrivilege(all: any[], need: any[]) {
   return false;
 }
 // role.departments的检查 , or关系
-export function checkAuthDepartments(target: any, need: number[]) {
-  if (!need || need.length === 0) {
-    return true;
-  }
-  if (target === null || target === undefined) { return false; }
-  return need.indexOf(target) > -1;
+// export function checkAuthDepartments(target: any, need: number[]) {
+//   if (!need || need.length === 0) {
+//     return true;
+//   }
+//   if (target === null || target === undefined) { return false; }
+//   return need.indexOf(target) > -1;
+//
+// }
 
-}
-
-export function checkPrivilegeAuthDepartments(menu: any) {
+export function checkAuth(menu: any) {
   if (!storeUserInfo.user || !storeUserInfo.user.role) { return false; }
-  return checkPrivilege((storeUserInfo.user as any).role.privileges, (menu.privileges as any[]))
-    && checkAuthDepartments((storeUserInfo.user as any).role.department ? (storeUserInfo.user as any).role.department.id : null, (menu.authDepartments as number[]));
+  if(menu.authFunc){
+    return menu.authFunc()
+  }else{
+    return checkPrivilege((storeUserInfo.user as any).role.privileges, (menu.privileges as any[]))
+  }
 }
 
 // 寻找本用户对应权限的第一个route
@@ -47,9 +50,9 @@ export function getMainRoute() {
   for (const menu of storePageMenu) {
     if (menu.children) {
       for (const m of menu.children) {
-        if (checkPrivilegeAuthDepartments(m)) { return m.name ? {name: m.name} : null; }
+        if (checkAuth(m)) { return m.name ? {name: m.name} : null; }
       }
-    } else if (checkPrivilegeAuthDepartments(menu)) { return menu.name ? {name: menu.name} : null; }
+    } else if (checkAuth(menu)) { return menu.name ? {name: menu.name} : null; }
   }
 }
 
@@ -143,7 +146,7 @@ export const RouteInterceptConfig = {
         // 用户权限
         if (
           !to.meta ||
-          checkPrivilegeAuthDepartments(to.meta)
+          checkAuth(to.meta)
         ) {
           next();
         } else {

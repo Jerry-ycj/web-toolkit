@@ -31,7 +31,7 @@ export function buildMenu(routes: any[], mainMenuTitles: any, indexName?: any) {
         menu[i / 2].cTitle = mainRouteItem.meta.CName;
         menu[i / 2].name = mainRouteItem.name;
         menu[i / 2].privileges = mainRouteItem.meta.privileges;
-        menu[i / 2].authDepartments = mainRouteItem.meta.authDepartments;
+        menu[i / 2].authFunc = mainRouteItem.meta.authFunc;
       } else {
         const children = menu[i / 2].children || [];
         if (children.length === 0) {
@@ -41,15 +41,12 @@ export function buildMenu(routes: any[], mainMenuTitles: any, indexName?: any) {
           cTitle: mainRouteItem.meta.CName,
           name: mainRouteItem.name,
           privileges: mainRouteItem.meta.privileges,
-          authDepartments: mainRouteItem.meta.authDepartments,
+          authFunc: mainRouteItem.meta.authFunc
         });
+        // todo authFunc替换privileges/authDepartments
         if (mainRouteItem.meta.privileges) {
           const privileges = menu[i / 2].privileges || [];
           menu[i / 2].privileges = privileges.concat(mainRouteItem.meta.privileges);
-        }
-        if (mainRouteItem.meta.authDepartments) {
-          const authDepartments = menu[i / 2].authDepartments || [];
-          menu[i / 2].authDepartments = authDepartments.concat(mainRouteItem.meta.authDepartments);
         }
       }
 
