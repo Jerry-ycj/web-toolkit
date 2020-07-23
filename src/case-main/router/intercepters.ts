@@ -25,22 +25,19 @@ export function checkPrivilege(all: any[], need: any[]) {
   }
   return false;
 }
-// role.departments的检查 , or关系
-// export function checkAuthDepartments(target: any, need: number[]) {
-//   if (!need || need.length === 0) {
-//     return true;
-//   }
-//   if (target === null || target === undefined) { return false; }
-//   return need.indexOf(target) > -1;
-//
-// }
+// 依赖storeUserInfo
+export function checkPrivilegeByUser(need: any[]) {
+  if (!storeUserInfo.user || !storeUserInfo.user.role) { return false; }
+  const all = storeUserInfo.user.role.privileges;
+  return checkPrivilege(all, need);
+}
 
 export function checkAuth(menu: any) {
-  if (!storeUserInfo.user || !storeUserInfo.user.role) { return false; }
-  if(menu.authFunc){
-    return menu.authFunc()
-  }else{
-    return checkPrivilege((storeUserInfo.user as any).role.privileges, (menu.privileges as any[]))
+  if (menu.authFunc) {
+    return menu.authFunc();
+  } else {
+    if (!storeUserInfo.user || !storeUserInfo.user.role) { return false; }
+    return checkPrivilege((storeUserInfo.user as any).role.privileges, (menu.privileges as any[]));
   }
 }
 

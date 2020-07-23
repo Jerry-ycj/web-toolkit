@@ -41,7 +41,7 @@ export function buildMenu(routes: any[], mainMenuTitles: any, indexName?: any) {
           cTitle: mainRouteItem.meta.CName,
           name: mainRouteItem.name,
           privileges: mainRouteItem.meta.privileges,
-          authFunc: mainRouteItem.meta.authFunc
+          authFunc: mainRouteItem.meta.authFunc,
         });
         // todo authFunc替换privileges/authDepartments
         if (mainRouteItem.meta.privileges) {
