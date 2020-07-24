@@ -6,6 +6,7 @@ function search(row: object, keywords: string, option: Partial<IFilterOption> = 
   // const excludeId = option.excludeId === undefined ? true : option.excludeId;
   // const excludeProps = option.excludeProps || [];
   const includeProps = option.includeProps || [];
+  if (!row) { return false; }
   for (const [prop, col] of Object.entries(row)) {
     const propPath = path === '' ? prop : path + '.' + prop;
     if (
