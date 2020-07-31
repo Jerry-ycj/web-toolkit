@@ -25,6 +25,7 @@
     "only-arrow-functions": false,
     "member-access": false,
     "no-empty": false,
+    "no-bitwise": false,
     "max-classes-per-file": false,
     "interface-name": false,
     "arrow-parens": false,

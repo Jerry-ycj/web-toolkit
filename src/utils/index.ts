@@ -1,6 +1,6 @@
-import { Message } from 'element-ui';
-import { AnyFunction } from '../types/common';
-import {isArray, isUndefined, isPlainObject} from './is';
+import {Message} from 'element-ui';
+import {AnyFunction} from '../types/common';
+import {isArray, isPlainObject, isUndefined} from './is';
 
 export * from './date';
 export * from './is';
@@ -26,6 +26,18 @@ export function generateID() {
     }
   }
   return ID;
+}
+
+export function generateUUID() {
+  let d = new Date().getTime();
+  if (window.performance && typeof window.performance.now === 'function') {
+    d += performance.now(); // use high-precision timer if available
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
 }
 
 /**
