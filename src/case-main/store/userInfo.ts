@@ -41,7 +41,12 @@ export function updateStoreUserInfo(data: IUserLoginInfo) {
   storeUserInfo.token = data.token;
   storeUserInfo.setting = data.setting;
   storeUserInfo.expire = new Date().getTime() + 1000 * 60 * 60 * 20; // 过期时间 20h
-  localStorage.setItem(process.env.VUE_APP_APP_NAME + '-user', JSON.stringify(storeUserInfo));
+  const obj = {
+    user: data.user,
+    token: data.token,
+    expire: storeUserInfo.expire,
+  };
+  localStorage.setItem(process.env.VUE_APP_APP_NAME + '-user', JSON.stringify(obj));
 }
 
 export function rmStoreUserInfo() {
