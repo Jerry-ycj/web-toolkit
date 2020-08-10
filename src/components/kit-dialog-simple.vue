@@ -5,7 +5,7 @@
           :visible.sync="modal.visible"
           :before-close="cancel"
           :show-close="showClose"
-          v-loading="modal.loading||false"
+          v-loading="modal.loading||loading"
           :width="width">
     <div slot="title" class="flex center">
       <slot name="title" />
@@ -21,8 +21,10 @@
   </el-dialog>
 </template>
 <script lang="ts">
-import { submitErrChanel, clearErrMsg} from '../case-main';
-export default {
+import { ref} from '@vue/composition-api';
+  import { submitErrChanel, clearErrMsg} from '../case-main';
+  import {useLoading} from '../service';
+  export default {
   props: {
     confirm: {
       type: Function,
@@ -34,7 +36,7 @@ export default {
     },
     modal: {
       type: Object,
-      default: { visible: true },
+      default: { visible: true, loading: false },
     },
     width: {
       type: String,
@@ -54,6 +56,7 @@ export default {
     },
   },
   setup(props: any) {
+    const loading = ref<boolean>(false);
     function cancel() {
       if (props.id) {
         // clearErrMsg(props.id);
@@ -67,10 +70,10 @@ export default {
       if (props.id) {
         submitErrChanel(props.id);
       }
-      await props.confirm();
+      await useLoading(loading, async () => {await props.confirm(); })();
     }
     return{
-      cancel, confirm2,
+      cancel, confirm2, loading,
     };
   },
 };
