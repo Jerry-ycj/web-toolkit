@@ -22,9 +22,9 @@
 </template>
 <script lang="ts">
 import { ref} from '@vue/composition-api';
-  import { submitErrChanel, clearErrMsg} from '../case-main';
-  import {useLoading} from '../service';
-  export default {
+import { submitErrChanel, clearErrMsg} from '../case-main';
+import {useLoading} from '../service';
+export default {
   props: {
     confirm: {
       type: Function,

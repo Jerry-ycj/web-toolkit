@@ -23,3 +23,7 @@ export const isArray = Array.isArray;
 export function isNil(v: any) {
   return v === undefined || v === null || v === '';
 }
+
+export function isDate(v: any) {
+  return v instanceof Date && !isNaN(v.getTime());
+}
