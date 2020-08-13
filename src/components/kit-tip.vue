@@ -1,31 +1,29 @@
 <template>
   <el-tooltip
-    :effect="effect"
-    :content="content"
-    placement="top-start">
+          :effect="effect"
+          placement="top-start">
     <i class="el-icon-warning tip" :style="{color: color}" />
+    <div slot="content">
+      <slot/>
+    </div>
   </el-tooltip>
 </template>
 <script lang="ts">
-export default {
-  props: {
-    content: {
-      type: String,
-      default: '',
+  export default {
+    props: {
+      color: {
+        type: String,
+        default: '#5a5a5a',
+      },
+      effect: {
+        type: String,
+        default: 'dark',
+      },
     },
-    color: {
-      type: String,
-      default: '#5a5a5a',
+    setup() {
+      return{};
     },
-    effect: {
-      type: String,
-      default: 'dark',
-    },
-  },
-  setup() {
-    return{};
-  },
-};
+  };
 </script>
 <style lang="scss" scoped>
   .tip{
