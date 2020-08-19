@@ -1,6 +1,6 @@
 import { EChartOption } from 'echarts';
 import { formatMilliseconds, formatTime, deepMerge, pascalToCamel } from '.';
-import { isString } from '.';
+import { isString, deepClone } from '.';
 
 interface FlatEchartOption extends EChartOption {
   [key: string]: any;
@@ -328,16 +328,26 @@ export function lineChartConfig(param: any[]) {
 interface ILineConfigData {
   x: string[];
   y: Array<EChartOption.SeriesLine | EChartOption.SeriesBar | EChartOption.SeriesPie>;
+  y2?: any
 }
 /**
- * 折线图：x:[], y:[ {name:xx,data:[]} ]
- * y 代表多条曲线，每条曲线参数值data
- * 参数表param：
- *  type：图形类型 默认line，bar
+ * 折线图：x:[], y:[ {name:xx,data:[], type:xx} ], y2:true
+ * x 代表xAxis中的data
+ * y 代表多条曲线-对应series，每条曲线参数值data，name是legend名称
+ * y2 代表第二个y轴
+ * 参数表param：同官方的参数配置
  *
+ * eg:
+ * lineConfig({
+      x: ele.list.map((e:any)=>e.key),
+      y: [{name: '当期',type: 'bar', data: ele.list.map((x:any)=>x.val1)},
+        {name: '去年同期',type: 'bar', data:ele.list.map((x:any)=>x.val2)},
+        {name: '同比增长%',type: 'line',yAxisIndex: 1, data:ele.list.map((x:any)=>x.rate)}],
+      y2:true,
+    }, {xAxis:{name: "时间"}, yAxis: [{name: '能耗量'},{name:'同比增长率'}]})
  */
 export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) {
-  const type = param && param.series && param.series[0].type || 'line';
+  const type = data.y && data.y[0].type || 'line';
   param = nestOption(param);
   const option: any = {
     tooltip : {
@@ -348,13 +358,13 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
     },
     color: getColors(),
     grid: {
-      top: param && param.legend ? '7%' : '15%',
+      top: data.y.length>0 ? '7%' : '15%',
       left: '3%',
       right: '3%',
       bottom: '5%',
       containLabel: true,
     },
-    yAxis: {
+    yAxis: [{
       nameGap: 8,
       type: 'value',
       axisLine: {
@@ -367,7 +377,7 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
         return value.max;
         // return value.max - 20;
       },
-    },
+    }],
     xAxis: {
       nameGap: 8,
       type: 'category',
@@ -387,17 +397,16 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
     },
     series: [],
   };
+  // y2
+  if(data.y2){
+    option.yAxis.push(deepClone(option.yAxis[0]))
+  }
   const names: any[] = [];
   data.y.forEach((serie: EChartOption.SeriesLine | EChartOption.SeriesBar) => {
     names.push(serie.name);
     const obj: any = {
-      type,
       ...serie,
     };
-    // 设置最大柱宽
-    if (type === 'bar') {
-      obj.barMaxWidth = '55';
-    }
     option.series.push(obj);
   });
   if (data.y.length > 1) {
@@ -408,7 +417,15 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
       },
     };
   }
+  // 这里会覆盖，eg params中有series，会逐个元素覆盖
   deepMerge(option, param);
+  // 设置bar
+  for(const e of option.series){
+    // 设置最大柱宽
+    if (e.type === 'bar') {
+      e.barMaxWidth = '55';
+    }
+  }
   return option;
 }
 

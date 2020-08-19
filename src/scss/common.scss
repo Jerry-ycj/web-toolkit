@@ -75,6 +75,7 @@ html, body {
     justify-content: center;
   }
 }
+
 // 在一行的el-button
 .button-in-row{
   .el-button{
@@ -85,23 +86,6 @@ html, body {
   }
 }
 
-.title-card {
-  .flex {
-    position: relative;
-  }
-  .title {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-}
-
-
-//@media only screen and (max-width: 1600px) and (min-width: 1280px){
-//  html{
-//    font-size: 15px;
-//  }
-//}
 @media only screen and (min-width: 960px){
   html{
     font-size: 14px;
