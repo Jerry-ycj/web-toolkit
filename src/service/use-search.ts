@@ -12,11 +12,11 @@ function search(row: object, keywords: string, option: Partial<IFilterOption> = 
     if (
       // includeProps.length > 0 &&
       includeProps.every((includeProp) => !includeProp.match(new RegExp(`^${propPath}`)))
-    // todo ???
-    // col !== undefined &&
-    // col !== null &&
-    // (excludeId && propPath.toLowerCase().endsWith('id') ||
-    // excludeProps.includes(prop))
+      // todo ???
+      // col !== undefined &&
+      // col !== null &&
+      // (excludeId && propPath.toLowerCase().endsWith('id') ||
+      // excludeProps.includes(prop))
     ) {
       continue;
     } else if (typeof col !== 'object' && searchToken(col, keywords)) {
@@ -72,8 +72,9 @@ interface SearchOptions {
  * @param {string[]} opt.includeProps specified which properties searched, support index-path like 'a.b.c'
  * @param {number} opt.delay if provided, searching will be delayed by this millisecond(s), default: 300
  * @return {Touple} [keywords, result]
+ * todo Ref<R[]> 出现错误
  */
-export function useSearch<R extends {}>(data: Ref<R[]>, opt: SearchOptions = {}): [Ref<string>, Ref<R[]>] {
+export function useSearch<R extends {}>(data: Ref<R[]>, opt: SearchOptions = {}): [Ref<string>, Ref<any[]>] {
   if (!data.value) { data.value = []; }
   const delay = isNumber(opt.delay) && !Number.isNaN(opt.delay) ? opt.delay : 150;
   const separator = opt.separator || ' ';
@@ -86,7 +87,7 @@ export function useSearch<R extends {}>(data: Ref<R[]>, opt: SearchOptions = {})
     }
     return true;
   };
-  const result: Ref<R[]> = ref(data.value);
+  const result: Ref<any[]> = ref(data.value);
   let timer = 0;
   watch(keywords, () => {
     clearTimeout(timer);
