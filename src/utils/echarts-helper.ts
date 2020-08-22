@@ -328,7 +328,7 @@ export function lineChartConfig(param: any[]) {
 interface ILineConfigData {
   x: string[];
   y: Array<EChartOption.SeriesLine | EChartOption.SeriesBar | EChartOption.SeriesPie>;
-  y2?: any
+  y2?: any;
 }
 /**
  * 折线图：x:[], y:[ {name:xx,data:[], type:xx} ], y2:true
@@ -358,7 +358,7 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
     },
     color: getColors(),
     grid: {
-      top: data.y.length>0 ? '7%' : '15%',
+      top: data.y.length > 0 ? '7%' : '15%',
       left: '3%',
       right: '3%',
       bottom: '5%',
@@ -398,8 +398,8 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
     series: [],
   };
   // y2
-  if(data.y2){
-    option.yAxis.push(deepClone(option.yAxis[0]))
+  if (data.y2) {
+    option.yAxis.push(deepClone(option.yAxis[0]));
   }
   const names: any[] = [];
   data.y.forEach((serie: EChartOption.SeriesLine | EChartOption.SeriesBar) => {
@@ -420,7 +420,7 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
   // 这里会覆盖，eg params中有series，会逐个元素覆盖
   deepMerge(option, param);
   // 设置bar
-  for(const e of option.series){
+  for (const e of option.series) {
     // 设置最大柱宽
     if (e.type === 'bar') {
       e.barMaxWidth = '55';
