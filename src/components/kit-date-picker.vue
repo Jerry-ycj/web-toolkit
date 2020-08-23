@@ -309,7 +309,6 @@ export default {
       yearrange: '年份',
     };
     onMounted(function() {
-      console.log(props.value);
       if (props.type === 'yearrange' && props.value && props.value.length > 0) {
         year1.value = props.value[0];
         year2.value = props.value[1];
