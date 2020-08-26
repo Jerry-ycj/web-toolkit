@@ -134,7 +134,8 @@ export const RouteInterceptConfig = {
       if (menu) { next(menu); }
     }
     // 处理需要登录的
-    if (to.matched.some((record) => !record.meta.authDisabled)) {
+    // if (to.matched.some((record) => !record.meta.authDisabled)) {
+    if (!to.meta.authDisabled) {
       if (!storeUserInfo.token) {
         // @ts-ignore
         storeUserInfo.redirect = (to as Route);
