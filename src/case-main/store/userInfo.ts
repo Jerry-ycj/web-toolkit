@@ -1,6 +1,6 @@
 import {IUser} from '..';
 import {Route} from 'vue-router';
-import {reactive} from '@vue/composition-api';
+import {reactive, set} from '@vue/composition-api';
 
 interface IUserLoginInfo {
   user?: IUser;
@@ -37,9 +37,11 @@ export function initStoreUserInfo() {
 }
 
 export function updateStoreUserInfo(data: IUserLoginInfo) {
-  storeUserInfo.user = data.user;
+  set(storeUserInfo, 'user', data.user);
   storeUserInfo.token = data.token;
-  storeUserInfo.setting = data.setting;
+  if (data.setting) {
+    storeUserInfo.setting = data.setting;
+  }
   storeUserInfo.expire = new Date().getTime() + 1000 * 60 * 60 * 20; // 过期时间 20h
   const obj = {
     user: data.user,
