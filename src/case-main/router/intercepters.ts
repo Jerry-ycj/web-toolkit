@@ -71,33 +71,35 @@ export function routeIntercept(router: VueRouter) {
     if (lastMatch) {
       // 先保存当前路由至store
       updateStoreCurrentRoute(to);
-      for (const component of Object.values(lastMatch.components)) {
-        if (!component) {
-          continue;
-        }
-        if (!(component as any).options && (!(component as any)._Ctor || !(component as any)._Ctor[0])) {
-          continue;
-        }
-        const mounteds = (component as any).options ? (component as any).options.mounted : (component as any)._Ctor[0].options.mounted as Array<() => void> | void;
-        if (mounteds && mounteds.length > 0) {
-          const lastMounted = mounteds.pop();
-          const nprogressDoneHandler = async function(this: any) {
-            await lastMounted!.call(this);
-            NProgress.done();
-          };
-          mounteds.push(nprogressDoneHandler);
-        } else {
-          (component as any).options.mounted = [() => NProgress.done()];
-        }
-      }
-      const ins = lastMatch.instances.default;
-      if (ins) {
-        const mounteds = ins.$options.mounted as Array<() => void> | void;
-        for (const mounted of (mounteds || [])) {
-          mounted.call(ins);
-        }
-        ins.$emit('hook:mounted');
-      }
+      // 路由完即结束
+      NProgress.done();
+      // for (const component of Object.values(lastMatch.components)) {
+      //   if (!component) {
+      //     continue;
+      //   }
+      //   if (!(component as any).options && (!(component as any)._Ctor || !(component as any)._Ctor[0])) {
+      //     continue;
+      //   }
+      //   const mounteds = (component as any).options ? (component as any).options.mounted : (component as any)._Ctor[0].options.mounted as Array<() => void> | void;
+      //   if (mounteds && mounteds.length > 0) {
+      //     const lastMounted = mounteds.pop();
+      //     const nprogressDoneHandler = async function(this: any) {
+      //       await lastMounted!.call(this);
+      //       NProgress.done();
+      //     };
+      //     mounteds.push(nprogressDoneHandler);
+      //   } else {
+      //     (component as any).options.mounted = [() => NProgress.done()];
+      //   }
+      // }
+      // const ins = lastMatch.instances.default;
+      // if (ins) {
+      //   const mounteds = ins.$options.mounted as Array<() => void> | void;
+      //   for (const mounted of (mounteds || [])) {
+      //     mounted.call(ins);
+      //   }
+      //   ins.$emit('hook:mounted');
+      // }
     }
     /**
      * 由于相同路由的跳转不会重新挂载路由组件, 此时须要手动调用mounted, instances为路由组件的实例
