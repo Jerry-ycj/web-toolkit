@@ -1,4 +1,4 @@
-import { IMenuItem, storePageMenu } from '../';
+import { IMenuItem, storePageMenu, storePageMenuOption } from '../';
 
 // 用于菜单导航的顺序,name+icon
 export function buildMenu(routes: any[], mainMenuTitles: any, indexName?: any) {
@@ -53,4 +53,5 @@ export function buildMenu(routes: any[], mainMenuTitles: any, indexName?: any) {
     }
   }
   storePageMenu.push(...menu);
+  storePageMenuOption.indexName = indexName
 }

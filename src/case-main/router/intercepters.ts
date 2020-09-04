@@ -5,7 +5,7 @@ import VueRouter from 'vue-router';
 import { Route } from 'vue-router';
 import { CancelTokenSources } from '../request';
 import { listContainAnd } from '../../utils';
-import { storeUserInfo, storePageMenu, initStoreUserInfo, updateStoreCurrentRoute } from '../store';
+import {storeUserInfo, storePageMenu, initStoreUserInfo, updateStoreCurrentRoute, storePageMenuOption} from '../store';
 import { submitErrChanel } from '..';
 
 /** 用于页面权限的校验 */
@@ -131,7 +131,7 @@ export const RouteInterceptConfig = {
     // 初始化err-msg-channel
     submitErrChanel('');
     // 指定默认第一个路由
-    if (to.path === '/') {
+    if (to.name === storePageMenuOption.indexName) {
       const menu = getMainRoute();
       if (menu) { next(menu); }
     }
