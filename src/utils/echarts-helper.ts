@@ -388,7 +388,7 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
         },
       },
       axisLabel: {
-        interval: 0, // 横轴信息全部显示
+        // interval: 0, // 横轴信息全部显示
         rotate: 0, // -30度角倾斜显示
       },
       axisTick: {
