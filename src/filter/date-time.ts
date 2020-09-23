@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { isNumber, formatDate, formatDateTime, formatMilliseconds, isDate } from '../utils';
-import {leftFill0} from '../utils/index';
+import {leftFill0} from '../utils';
 
 Vue.filter('DD:hh:mm', (val: number) => {
   return formatMilliseconds(val, false, 'DD:hh:mm');
@@ -71,4 +71,3 @@ Vue.filter('dateMD', (value?: number | Date | String) => {
     }
   }
 });
-

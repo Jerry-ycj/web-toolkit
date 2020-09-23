@@ -7,12 +7,12 @@ import {pushErrMsg, storeErrMsg} from '../case-main/store';
 let socket: any = null;
 
 // client的req或是server的req
-interface MsgReq {
+export interface MsgReq {
   code: string;
   data: any;
 }
 
-interface MsgRes {
+export interface MsgRes {
   result: boolean;
   message?: string;
   data: any;
@@ -21,9 +21,9 @@ interface MsgRes {
 const EventPublic = 'event:public';
 
 // 需要在最外层的main的onMounted中初始化
-export function init() {
+export function init(port: number) {
   // socket = io(window.location.host);
-  socket = io(window.location.hostname + ':port');
+  socket = io(window.location.hostname + ':' + port);
   socket.on('connect', function() {
     console.log('connect');
   });
@@ -31,7 +31,7 @@ export function init() {
   socket.on(EventPublic, function(data: string) {
     const json = JSON.parse(data) as MsgReq;
     if (eventHandlers[json.code]) {
-      eventHandlers[json.code]();
+      eventHandlers[json.code](json);
     }
   });
 }
@@ -78,3 +78,5 @@ export function request(code: string, data: any, config?: any) {
     });
   });
 }
+
+// todo request和await的处理，以及http后await接收处理

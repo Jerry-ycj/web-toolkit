@@ -29,26 +29,7 @@ import 'web-toolkit/src/plugins';
 import 'web-toolkit/src/case-main';
 import 'web-toolkit/src/filter/date-time';
 
-// components
-import lktTable from 'web-toolkit/src/components/lkt-table.vue';
-Vue.component('lkt-table', lktTable);
-import lktSelect from 'web-toolkit/src/components/lkt-select.vue';
-Vue.component('lkt-select', lktSelect);
-import LktDatePicker from 'web-toolkit/src/components/lkt-date-picker.vue';
-Vue.component('lkt-date-picker', LktDatePicker);
-import LktChart from 'web-toolkit/src/components/lkt-chart.vue';
-Vue.component('lkt-chart', LktChart);
-import LktCheck from 'web-toolkit/src/components/lkt-check.vue';
-Vue.component('lkt-check', LktCheck);
-import KitDialogSimple from 'web-toolkit/src/components/kit-dialog-simple.vue';
-Vue.component('kit-dialog-simple', KitDialogSimple);
-import KitErrChannel from 'web-toolkit/src/components/kit-err-channel.vue';
-Vue.component('kit-err-channel', KitErrChannel);
-import KitTip from 'web-toolkit/src/components/kit-tip.vue';
-Vue.component('kit-tip', KitTip);
 ```
-
-- service、utils的可以直接在项目中引用。
 
 ## 环境变量
 
@@ -66,3 +47,14 @@ Vue.component('kit-tip', KitTip);
 
 如上传formdata时：
 参数会经过axios过滤器，注意查看过滤器的逻辑。
+
+# case-main
+
+# case-pc
+
+# components
+# filter
+# plugins
+# scss
+# service
+# utils
