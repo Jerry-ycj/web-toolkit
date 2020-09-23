@@ -339,12 +339,12 @@ interface ILineConfigData {
  *
  * eg:
  * lineConfig({
-      x: ele.list.map((e:any)=>e.key),
-      y: [{name: '当期',type: 'bar', data: ele.list.map((x:any)=>x.val1)},
-        {name: '去年同期',type: 'bar', data:ele.list.map((x:any)=>x.val2)},
-        {name: '同比增长%',type: 'line',yAxisIndex: 1, data:ele.list.map((x:any)=>x.rate)}],
-      y2:true,
-    }, {xAxis:{name: "时间"}, yAxis: [{name: '能耗量'},{name:'同比增长率'}]})
+ *    x: ele.list.map((e:any)=>e.key),
+ *    y: [{name: '当期',type: 'bar', data: ele.list.map((x:any)=>x.val1)},
+ *      {name: '去年同期',type: 'bar', data:ele.list.map((x:any)=>x.val2)},
+ *      {name: '同比增长%',type: 'line',yAxisIndex: 1, data:ele.list.map((x:any)=>x.rate)}],
+ *    y2:true,
+ *  }, {xAxis:{name: "时间"}, yAxis: [{name: '能耗量'},{name:'同比增长率'}]})
  */
 export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) {
   const type = data.y && data.y[0].type || 'line';

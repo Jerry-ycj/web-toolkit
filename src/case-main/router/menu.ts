@@ -53,5 +53,5 @@ export function buildMenu(routes: any[], mainMenuTitles: any, indexName?: any) {
     }
   }
   storePageMenu.push(...menu);
-  storePageMenuOption.indexName = indexName
+  storePageMenuOption.indexName = indexName;
 }

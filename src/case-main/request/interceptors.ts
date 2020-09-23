@@ -55,4 +55,3 @@ export function axiosIntercept(router: VueRouter) {
     return config;
   });
 }
-
