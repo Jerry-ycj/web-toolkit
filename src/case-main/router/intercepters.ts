@@ -33,6 +33,7 @@ export function checkPrivilegeByUser(need: any[]) {
 }
 
 export function checkAuth(menu: any) {
+  if (!menu) { return false; }
   if (menu.authFunc) {
     return menu.authFunc();
   } else {
@@ -46,6 +47,7 @@ export function getMainRoute() {
   if (!storeUserInfo.user) { return null; }
   for (const menu of storePageMenu) {
     if (menu.children) {
+      if (!menu) { continue; }
       for (const m of menu.children) {
         if (checkAuth(m)) { return m.name ? {name: m.name} : null; }
       }
