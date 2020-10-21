@@ -26,7 +26,7 @@ const errHandle = (e: AxiosError, url: string, config: any) => {
   const throwable = isUndefined(config.throwable) || config.throwable;
   const response = e.response;
   const data = response ? response.data : undefined;
-  const msg = response ? data.message : e.message;
+  const msg = data ? data.message : e.message;
   // 接口错误后的json数据处理
   if (data) {
     if (showMsg && msg) {
@@ -42,7 +42,7 @@ const errHandle = (e: AxiosError, url: string, config: any) => {
     if (throwable) {
       throw new Error(msg);
     }
-  } else {
+  } else if (throwable) {
     // 有可能是cancel todo
     // Message.error('网络错误');
     throw new Error(msg);
