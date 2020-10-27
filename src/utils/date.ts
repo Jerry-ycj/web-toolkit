@@ -69,6 +69,12 @@ export function formatTime(date: Date) {
   return h + ':' + m + ':' + s;
 }
 
+export function formatTimeHM(date: Date) {
+  const h = leftFill0(date.getHours());
+  const m = leftFill0(date.getMinutes());
+  return h + ':' + m;
+}
+
 export function formatDateTime(date: Date) {
   return formatDate(date) + ' ' + formatTime(date);
 }
