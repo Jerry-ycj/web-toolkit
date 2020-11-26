@@ -46,6 +46,7 @@ export function checkAuth(menu: any) {
 export function getMainRoute() {
   if (!storeUserInfo.user) { return null; }
   for (const menu of storePageMenu) {
+    if (!menu) { continue; }
     if (menu.children) {
       if (!menu) { continue; }
       for (const m of menu.children) {
@@ -132,10 +133,11 @@ export const RouteInterceptConfig = {
     }
     // 初始化err-msg-channel
     submitErrChanel('');
-    // 指定默认第一个路由
-    if (to.name === storePageMenuOption.indexName) {
+    // 指定默认第一个路由，如果第一个路由无权限 todo
+    if (to.meta.authFunc && !to.meta.authFunc()) {
       const menu = getMainRoute();
       if (menu) { next(menu); }
+      return;
     }
     // 处理需要登录的
     // if (to.matched.some((record) => !record.meta.authDisabled)) {
