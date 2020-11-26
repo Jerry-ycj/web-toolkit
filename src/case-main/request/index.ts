@@ -6,6 +6,10 @@ import Qs from 'qs';
 axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? process.env.VUE_APP_TEST_BASE_URL : process.env.VUE_APP_BASE_URL;
 export const CancelTokenSources: CancelTokenSource[] = [];
 
+export function getBaseUrl() {
+  return axios.defaults.baseURL;
+}
+
 /// 重载配置项
 export const RequestConfig = {
   contentType: 'form',
