@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+      v-dialogDrag
           :modal-append-to-body='false'
           :close-on-click-modal="false"
           :visible.sync="modal.visible"
@@ -24,6 +25,8 @@
 import { ref} from '@vue/composition-api';
 import { submitErrChanel, clearErrMsg} from '../case-main';
 import {useLoading} from '../service';
+import 'web-toolkit/src/directive/dialog-drag';
+
 export default {
   props: {
     confirm: {
