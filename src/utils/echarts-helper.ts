@@ -1,8 +1,9 @@
-import { EChartOption } from 'echarts';
+// @ts-ignore
+import { EChartsFullOption } from 'echarts';
 import { formatMilliseconds, formatTime, deepMerge, pascalToCamel } from '.';
 import { isString, deepClone } from '.';
 
-interface FlatEchartOption extends EChartOption {
+interface FlatEChartOption extends EChartsFullOption {
   [key: string]: any;
 }
 /**
@@ -10,7 +11,7 @@ interface FlatEchartOption extends EChartOption {
  * 注意：扁平属性会覆盖已存在的嵌套属性
  * @param option
  */
-export function nestOption(option: FlatEchartOption) {
+export function nestOption(option: FlatEChartOption) {
   const xAxis: Record<string, any> = {};
   const yAxis: Record<string, any> = {};
   const grid: Record<string, any> = {};
@@ -28,7 +29,7 @@ export function nestOption(option: FlatEchartOption) {
       delete option[key];
     }
   }
-  const nested: EChartOption = { ...option };
+  const nested: EChartsFullOption = { ...option };
   const keys = Object.keys;
   if (keys(xAxis).length > 0) {
     nested.xAxis = xAxis;
@@ -166,7 +167,7 @@ export function timelineConfig(times: ITimelineConfigTimes[], statusMap: any, pa
     option.dataZoom = undefined;
   }
   if (!param.showTime) {
-    (option.xAxis as EChartOption.XAxis).show = false;
+    (option.xAxis as EChartsFullOption.XAxis).show = false;
   }
   if (param.fontSize) {
     option.xAxis.axisLabel.fontSize = param.fontSize;
@@ -182,11 +183,11 @@ export function timesPieConfig(summaryTime: any, param: any, statusMap: any) {
     itemStyle: { normal: { color: statusMap(status) ? statusMap(status).color : '' } },
     selected: selected.includes(status),
   }));
-  const option: EChartOption = {
+  const option: EChartsFullOption = {
     tooltip: {
       trigger: 'item',
-      formatter(params) {
-        const { name, value, percent } = params as EChartOption.Tooltip.Format;
+      formatter(params:any) {
+        const { name, value, percent } = params as EChartsFullOption.Tooltip.Format;
         const val = value as number;
         return name + '<br />'
           + formatMilliseconds(val) + ' (' + percent + '%) ';
@@ -327,7 +328,7 @@ export function lineChartConfig(param: any[]) {
 
 interface ILineConfigData {
   x: string[];
-  y: Array<EChartOption.SeriesLine | EChartOption.SeriesBar | EChartOption.SeriesPie>;
+  y: Array<EChartsFullOption.SeriesLine | EChartsFullOption.SeriesBar | EChartsFullOption.SeriesPie>;
   y2?: any;
 }
 /**
@@ -346,7 +347,7 @@ interface ILineConfigData {
  *    y2:true,
  *  }, {xAxis:{name: "时间"}, yAxis: [{name: '能耗量'},{name:'同比增长率'}]})
  */
-export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) {
+export function lineConfig(data: ILineConfigData, param: FlatEChartOption = {}) {
   const type = data.y && data.y[0].type || 'line';
   param = nestOption(param);
   const option: any = {
@@ -402,7 +403,7 @@ export function lineConfig(data: ILineConfigData, param: FlatEchartOption = {}) 
     option.yAxis.push(deepClone(option.yAxis[0]));
   }
   const names: any[] = [];
-  data.y.forEach((serie: EChartOption.SeriesLine | EChartOption.SeriesBar) => {
+  data.y.forEach((serie: EChartsFullOption.SeriesLine | EChartsFullOption.SeriesBar) => {
     names.push(serie.name);
     const obj: any = {
       ...serie,
