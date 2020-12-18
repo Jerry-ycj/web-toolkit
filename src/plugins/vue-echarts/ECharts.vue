@@ -2,7 +2,7 @@
   <div class="echarts" />
 </template>
 
-<style>
+<style scoped lang="scss">
 .echarts {
   width: 600px;
   height: 400px;
@@ -270,6 +270,6 @@ export default {
   registerTheme (name, theme) {
     echarts.registerTheme(name, theme)
   },
-  graphic: echarts.graphic
+  graphic: echarts.graphic,
 }
 </script>

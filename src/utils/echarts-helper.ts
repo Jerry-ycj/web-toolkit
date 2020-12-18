@@ -186,7 +186,7 @@ export function timesPieConfig(summaryTime: any, param: any, statusMap: any) {
   const option: EChartsFullOption = {
     tooltip: {
       trigger: 'item',
-      formatter(params:any) {
+      formatter(params: any) {
         const { name, value, percent } = params as EChartsFullOption.Tooltip.Format;
         const val = value as number;
         return name + '<br />'
