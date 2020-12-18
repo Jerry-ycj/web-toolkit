@@ -10,7 +10,7 @@
 </style>
 
 <script>
-var echarts = require('echarts');
+const echarts = require('echarts');
 import debounce from 'lodash/debounce'
 import { addListener, removeListener } from 'resize-detector'
 
