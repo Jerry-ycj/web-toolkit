@@ -1,3 +1,5 @@
+// 注：要将此common.scss import于项目中的common.scss中，可使这里的style生成在框架style之后。
+
 @import './transition.scss';
 @import "theme_light";
 
