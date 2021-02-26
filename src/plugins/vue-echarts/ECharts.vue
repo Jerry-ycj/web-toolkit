@@ -197,8 +197,8 @@ export default {
               // `this.options = Object.assign({}, this.options, { ... })`
               // will trigger `this.chart.setOption(val, true)
               // `this.options.title.text = 'Trends'`
-              // will trigger `this.chart.setOption(val, false)`
-              this.chart.setOption(val, val !== oldVal)
+              // will trigger `this.chart.setOption(val, false)` todo bug?
+              if(this.chart && val) this.chart.setOption(val, val !== oldVal)
             }
           },
           { deep: !this.watchShallow }
