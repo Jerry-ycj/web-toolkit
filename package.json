@@ -22,7 +22,7 @@
     "vant": "~2.12.3",
     "vue": "~2.6.11",
     "vue-router": "~3.3.4",
-    "lodash": "~4.17.15",
+    "lodash": "~4.17.21",
     "resize-detector": "~0.1.10"
   },
   "devDependencies": {
